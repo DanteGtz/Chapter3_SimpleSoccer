@@ -240,3 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+Chapter3_SimpleSoccer/Chapter3_SimpleSoccer.vcxproj.filters
