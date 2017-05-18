@@ -12,7 +12,7 @@
 #include <limits>
 #include <math.h>
 
-#include "../Misc/Utils.h"
+#include "utils.h"
 
 struct Vector2D
 {
@@ -30,7 +30,7 @@ struct Vector2D
 		y = 0.0;
 	}
 
-	bool isZero() const { return (x * x + y * y) < MinDouble; }
+	bool isZero() const { return (x * x + y * y) < minDouble; }
 
 	inline double dot(const Vector2D& v2) const;
 

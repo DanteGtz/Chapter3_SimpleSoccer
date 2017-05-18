@@ -6,7 +6,7 @@
  */
 #include <fstream>
 
-#include "2D/Vector2D.h"
+#include "Vector2D.h"
 
 std::ostream& operator<<(std::ostream& os, const Vector2D& rhs)
 {
