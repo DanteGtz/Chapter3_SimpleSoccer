@@ -33,11 +33,11 @@
     <ClInclude Include="Chapter3_SimpleSoccer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2D.h">
-      <Filter>Header Files\2D</Filter>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Transformations.h">
-      <Filter>Header Files\2D</Filter>
+    <ClInclude Include="C2DMatrix.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -45,9 +45,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Chapter3_SimpleSoccer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
