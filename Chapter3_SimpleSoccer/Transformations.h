@@ -90,6 +90,35 @@ inline Vector2D pointToWoldSpace
 }
 
 
+
+//-----------------> Punto Global a Local <----------------//
+inline Vector2D pointToLocalSpace(const Vector2D &point, Vector2D agentHeading,
+	Vector2D &agentSide, Vector2D &agentPosition)
+{
+
+	//make a copy of the point
+	Vector2D transPoint = point;
+
+	//create a transformation matrix
+	C2DMatrix matTransform;
+
+	double tX = -agentPosition.dot(agentHeading);
+	double tY = -agentPosition.dot(agentSide);
+
+	//create the transformation matrix
+	matTransform._11(agentHeading.x); matTransform._12(agentSide.x);
+	matTransform._21(agentHeading.y); matTransform._22(agentSide.y);
+	matTransform._31(tX);           matTransform._32(tY);
+
+	//now transform the vertices
+	matTransform.transformVector2Ds(transPoint);
+
+	return transPoint;
+}
+
+
+
+
 //-----------------> Vector local sobre coordenadas globales <----------------//
 
 //Aplica una transformacion desde las coordenadas locales del
