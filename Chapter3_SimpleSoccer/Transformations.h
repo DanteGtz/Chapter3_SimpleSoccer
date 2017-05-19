@@ -2,9 +2,7 @@
 #include <vector>
 
 #include "Vector2D.h"
-
-class C2DMatrix;
-//#include "C2DMatrix.h"
+#include "C2DMatrix.h"
 
 //-----------------> Transformacion global <----------------//
 
@@ -54,11 +52,6 @@ inline std::vector<Vector2D> worldTransform
 	std::vector<Vector2D> transVector2Ds = points;
 
 	C2DMatrix matTransform;
-
-	if ((scale.x != 1.0) || (scale.y != 1.0))
-	{
-		matTransform.scale(scale.x, scale.y);
-	}
 
 	matTransform.rotate(forward, side);
 
