@@ -564,7 +564,6 @@ inline bool twoCirclesIntersectionPoints(double x1, double y1, double r1,
 
 //Si dos circulos se sobreponen, procede a calcular el area resultante
 //de esta union
-//------------------------ TwoCirclesIntersectionArea --------------------
 // Mas http://mathforum.org/library/drmath/view/54785.html
 inline double twoCirclesIntersectionArea(double x1, double y1, double r1,
 	double x2, double y2, double r2)
@@ -601,7 +600,7 @@ inline double twoCirclesIntersectionArea(double x1, double y1, double r1,
 }
 
 
-//------------------------- Donde esta el punto  --------------------------------------
+//-------------------------> Donde esta el punto  <-----------------------------------//
 enum span_type 
 { 
 	PLANE_BACKSIDE, 
