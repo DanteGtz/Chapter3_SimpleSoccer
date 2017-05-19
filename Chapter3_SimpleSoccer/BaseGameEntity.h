@@ -2,22 +2,14 @@
 #ifndef BASE_GAME_ENTITY_H
 #define BASE_GAME_ENTITY_H
 #pragma warning (disable:4786)
-//------------------------------------------------------------------------
-//
-//  Name: BaseGameEntity.h
-//
-//  Desc: Base class to define a common interface for all game
-//        entities
-//
-//  Author: Mat Buckland (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
+//The base class for all agents and objects
 #include <vector>
 #include <string>
 #include <iosfwd>
-#include "../2D/Vector2D.h"
-#include "../2D/Geometry.h"
-#include "../misc/utils.h"
+
+#include "Geometry.h"
+#include "utils.h"
+#include "Vector2D.h"
 
 
 
@@ -28,38 +20,41 @@ class BaseGameEntity
 {
 public:
 
-	enum { default_entity_type = -1 };
+	enum { DEFAULT_ENTITY_TYPE = -1 };
 
 private:
 
-	//each entity has a unique ID
+	//Cada una de las entidades tiene un identificador
 	int         m_ID;
 
-	//every entity has a type associated with it (health, troll, ammo etc)
+	//Cada entidad tiene un tipo asociado en el
+	//(Ya sea health, troll, ammo, etc.)
 	int         m_iType;
 
-	//this is a generic flag. 
+	//Una bandera bit 
 	bool        m_bTag;
 
-	//this is the next valid ID. Each time a BaseGameEntity is instantiated
-	//this value is updated
+	//El siguiente identificador valido. Cada vez que BaseGameEntity
+	//es instanciada este valor se actualiza
 	static int  m_iNextValidID;
 
 	//this must be called within each constructor to make sure the ID is set
 	//correctly. It verifies that the value passed to the method is greater
 	//or equal to the next valid ID, before setting the ID and incrementing
 	//the next valid ID
-	void SetID(int val);
+	void setID(int val);
 
 
 protected:
 
-	//its location in the environment
+	//Su posicion en el espacio
 	Vector2D m_vPosition;
 
 	Vector2D m_vScale;
 
-	//the magnitude of this object's bounding radius
+	//
+	//la magnitud de su 'bounding radius', variable utilizada en la
+	//parte grafica del objeto
 	double    m_dBoundingRadius;
 
 
@@ -74,36 +69,46 @@ public:
 	virtual void Render() = 0;
 
 	virtual bool HandleMessage(const Telegram& msg) { return false; }
+	
+	//Las entidades deben ser capaces de leer/escribir su informacion
+	//dentro de un stream
+	virtual void write(std::ostream&  os)const {}
+	virtual void read(std::ifstream& is) {}
 
-	//entities should be able to read/write their data to a stream
-	virtual void Write(std::ostream&  os)const {}
-	virtual void Read(std::ifstream& is) {}
-
-	//use this to grab the next valid ID
+	//Se ultiliza para asignar el siguiente identificador valido
 	static int   GetNextValidID() { return m_iNextValidID; }
 
-	//this can be used to reset the next ID
+	//Funcion utiliza para reiniciar el valor ID
 	static void  ResetNextValidID() { m_iNextValidID = 0; }
 
 
 
-	Vector2D     Pos()const { return m_vPosition; }
-	void         SetPos(Vector2D new_pos) { m_vPosition = new_pos; }
+	Vector2D     getPos() const { return m_vPosition; }
+	void         setPos ( Vector2D new_pos ) { m_vPosition = new_pos; }
 
-	double       BRadius()const { return m_dBoundingRadius; }
-	void         SetBRadius(double r) { m_dBoundingRadius = r; }
-	int          ID()const { return m_ID; }
+	double       getBRadius () const { return m_dBoundingRadius; }
+	void         setBRadius ( double r ) { m_dBoundingRadius = r; }
+	int          getID () const { return m_ID; }
 
-	bool         IsTagged()const { return m_bTag; }
-	void         Tag() { m_bTag = true; }
-	void         UnTag() { m_bTag = false; }
+	bool         isTagged ()const { return m_bTag; }
+	void         tagIt () { m_bTag = true; }
+	void         unTag () { m_bTag = false; }
 
-	Vector2D     Scale()const { return m_vScale; }
-	void         SetScale(Vector2D val) { m_dBoundingRadius *= MaxOf(val.x, val.y) / MaxOf(m_vScale.x, m_vScale.y); m_vScale = val; }
-	void         SetScale(double val) { m_dBoundingRadius *= (val / MaxOf(m_vScale.x, m_vScale.y)); m_vScale = Vector2D(val, val); }
+	Vector2D     getScale () const { return m_vScale; }
+	void         setScale ( Vector2D val) 
+	{ 
+		m_dBoundingRadius *= maxOf(val.x, val.y) / 
+		maxOf(m_vScale.x, m_vScale.y);
+		m_vScale = val; 
+	}
+	void         setScale ( double val ) 
+	{
+		m_dBoundingRadius *= (val / maxOf(m_vScale.x, m_vScale.y)); 
+		m_vScale = Vector2D(val, val);
+	}
 
-	int          EntityType()const { return m_iType; }
-	void         SetEntityType(int new_type) { m_iType = new_type; }
+	int          getEntityType()const { return m_iType; }
+	void         setEntityType(int new_type) { m_iType = new_type; }
 
 };
 
