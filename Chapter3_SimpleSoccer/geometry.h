@@ -449,17 +449,16 @@ inline bool segmentObjectIntersection2D(const Vector2D& A,
 
 
 
-/ ---------------------------- - TwoCirclesOverlapped-------------------- -
-//
-//  Returns true if the two circles overlap
-//------------------------------------------------------------------------
-inline bool TwoCirclesOverlapped(double x1, double y1, double r1,
+//-----------------> Dos circunferencias sobrepuestas <----------------//
+
+//Regresa verdadero si se solapan
+inline bool twoCirclesOverlapped(double x1, double y1, double r1,
 	double x2, double y2, double r2)
 {
-	double DistBetweenCenters = sqrt((x1 - x2) * (x1 - x2) +
+	double distBetweenCenters = sqrt((x1 - x2) * (x1 - x2) +
 		(y1 - y2) * (y1 - y2));
 
-	if ((DistBetweenCenters < (r1 + r2)) || (DistBetweenCenters < fabs(r1 - r2)))
+	if ((distBetweenCenters < (r1 + r2)) || (distBetweenCenters < fabs(r1 - r2)))
 	{
 		return true;
 	}
@@ -467,17 +466,19 @@ inline bool TwoCirclesOverlapped(double x1, double y1, double r1,
 	return false;
 }
 
-//----------------------------- TwoCirclesOverlapped ---------------------
-//
-//  Returns true if the two circles overlap
-//------------------------------------------------------------------------
-inline bool TwoCirclesOverlapped(Vector2D c1, double r1,
+
+
+
+//-----------------> Dos circunferencias sobrepuestas <----------------//
+
+//Regresa verdadero si se solapan
+inline bool twoCirclesOverlapped(Vector2D c1, double r1,
 	Vector2D c2, double r2)
 {
-	double DistBetweenCenters = sqrt((c1.x - c2.x) * (c1.x - c2.x) +
+	double distBetweenCenters = sqrt((c1.x - c2.x) * (c1.x - c2.x) +
 		(c1.y - c2.y) * (c1.y - c2.y));
 
-	if ((DistBetweenCenters < (r1 + r2)) || (DistBetweenCenters < fabs(r1 - r2)))
+	if ((distBetweenCenters < (r1 + r2)) || (distBetweenCenters < fabs(r1 - r2)))
 	{
 		return true;
 	}
@@ -485,11 +486,14 @@ inline bool TwoCirclesOverlapped(Vector2D c1, double r1,
 	return false;
 }
 
-//--------------------------- TwoCirclesEnclosed ---------------------------
-//
-//  returns true if one circle encloses the other
-//-------------------------------------------------------------------------
-inline bool TwoCirclesEnclosed(double x1, double y1, double r1,
+
+
+
+//-----------------> Una circunferencia dentro de otra <----------------//
+
+//Regresa verdadero si encuentra que una circunferencia encierra
+//a la otra
+inline bool twoCirclesEnclosed(double x1, double y1, double r1,
 	double x2, double y2, double r2)
 {
 	double DistBetweenCenters = sqrt((x1 - x2) * (x1 - x2) +
@@ -503,52 +507,48 @@ inline bool TwoCirclesEnclosed(double x1, double y1, double r1,
 	return false;
 }
 
-//------------------------ TwoCirclesIntersectionPoints ------------------
-//
-//  Given two circles this function calculates the intersection points
-//  of any overlap.
-//
-//  returns false if no overlap found
-//
-// see http://astronomy.swin.edu.au/~pbourke/geometry/2circle/
-//------------------------------------------------------------------------ 
-inline bool TwoCirclesIntersectionPoints(double x1, double y1, double r1,
-	double x2, double y2, double r2,
-	double &p3X, double &p3Y,
+
+
+
+//-----------------> Una circunferencia dentro de otra <----------------//
+
+//Dadas dos circunferencias, calcula los puntos de interseccion si estan
+//solapadas
+// Mas http://astronomy.swin.edu.au/~pbourke/geometry/2circle/
+inline bool twoCirclesIntersectionPoints(double x1, double y1, double r1,
+	double x2, double y2, double r2, double &p3X, double &p3Y,
 	double &p4X, double &p4Y)
 {
-	//first check to see if they overlap
-	if (!TwoCirclesOverlapped(x1, y1, r1, x2, y2, r2))
+	//Primero checa si estan sobrepuestas
+	if (!twoCirclesOverlapped(x1, y1, r1, x2, y2, r2))
 	{
 		return false;
 	}
 
-	//calculate the distance between the circle centers
+	//Calcula la distancia entre los centros
 	double d = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 
-	//Now calculate the distance from the center of each circle to the center
-	//of the line which connects the intersection points.
+	//Ahora calcula la distancia desde los centros de la circunferencia
+	//al punto medio del segmento de linea que conecta a las intersecciones
 	double a = (r1 - r2 + (d * d)) / (2 * d);
 	//  double b = (r2 - r1 + (d * d)) / (2 * d);
 
-
-	//MAYBE A TEST FOR EXACT OVERLAP? 
-
-	//calculate the point P2 which is the center of the line which 
-	//connects the intersection points
-	double p2X, p2Y;
+	//Calcula el punto P2 el cual esta en centro de segmento de linea
+	//el cual conecta a los dos puntos
+	double p2X;
+	double p2Y;
 
 	p2X = x1 + a * (x2 - x1) / d;
 	p2Y = y1 + a * (y2 - y1) / d;
 
-	//calculate first point
+	//Calcula el primer punto
 	double h1 = sqrt((r1 * r1) - (a * a));
 
 	p3X = p2X - h1 * (y2 - y1) / d;
 	p3Y = p2Y + h1 * (x2 - x1) / d;
 
 
-	//calculate second point
+	//calcula el segundo punto
 	double h2 = sqrt((r2 * r2) - (a * a));
 
 	p4X = p2X + h2 * (y2 - y1) / d;
@@ -558,65 +558,73 @@ inline bool TwoCirclesIntersectionPoints(double x1, double y1, double r1,
 
 }
 
+
+
+//-----------------> El area de interseccion de los dos circulos <----------------//
+
+//Si dos circulos se sobreponen, procede a calcular el area resultante
+//de esta union
 //------------------------ TwoCirclesIntersectionArea --------------------
-//
-//  Tests to see if two circles overlap and if so calculates the area
-//  defined by the union
-//
-// see http://mathforum.org/library/drmath/view/54785.html
-//-----------------------------------------------------------------------
-inline double TwoCirclesIntersectionArea(double x1, double y1, double r1,
+// Mas http://mathforum.org/library/drmath/view/54785.html
+inline double twoCirclesIntersectionArea(double x1, double y1, double r1,
 	double x2, double y2, double r2)
 {
-	//first calculate the intersection points
-	double iX1, iY1, iX2, iY2;
+	//Primero calculamos el puntos de interseccion
+	double iX1;
+	double iY1;
+	double iX2;
+	double iY2;
 
-	if (!TwoCirclesIntersectionPoints(x1, y1, r1, x2, y2, r2, iX1, iY1, iX2, iY2))
+	if (!twoCirclesIntersectionPoints(x1, y1, r1, x2, y2, r2, iX1, iY1, iX2, iY2))
 	{
 		return 0.0; //no overlap
 	}
 
-	//calculate the distance between the circle centers
+	//Calcula la distancia entre los centros
 	double d = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 
-	//find the angles given that A and B are the two circle centers
-	//and C and D are the intersection points
-	double CBD = 2 * acos((r2*r2 + d*d - r1*r1) / (r2 * d * 2));
+	//Encuentra los angulos formados tal que A y B son el centro de
+	//los dos circulos; C y D son los puntos de interseccion
+	double CBD = 2 * acos((r2 * r2 + d * d - r1 * r1) / (r2 * d * 2));
 
-	double CAD = 2 * acos((r1*r1 + d*d - r2*r2) / (r1 * d * 2));
+	double CAD = 2 * acos((r1 * r1 + d * d - r2 * r2) / (r1 * d * 2));
 
-
-	//Then we find the segment of each of the circles cut off by the 
-	//chord CD, by taking the area of the sector of the circle BCD and
-	//subtracting the area of triangle BCD. Similarly we find the area
-	//of the sector ACD and subtract the area of triangle ACD.
-
-	double area = 0.5f*CBD*r2*r2 - 0.5f*r2*r2*sin(CBD) +
-		0.5f*CAD*r1*r1 - 0.5f*r1*r1*sin(CAD);
+	//Cuando encontramos el segmento de cada circulo que fue cortado
+	//por la cuerda CD, tomamos el area del sector circular BCD y el
+	//substraemos el area del triangulo BCD. De forma similar podemos
+	//encontrar el area del sector ACD y substraemos el area
+	//formado por los puntos ACD
+	double area = 0.5f * CBD * r2 * r2 - 0.5f * r2 * r2  *sin(CBD) +
+		0.5f * CAD * r1 * r1 - 0.5f * r1 * r1 * sin(CAD);
 
 	return area;
 }
 
 
-//------------------------- WhereIsPoint --------------------------------------
-enum span_type { plane_backside, plane_front, on_plane };
-inline span_type WhereIsPoint(Vector2D point,
-	Vector2D PointOnPlane, //any point on the plane
+//------------------------- Donde esta el punto  --------------------------------------
+enum span_type 
+{ 
+	PLANE_BACKSIDE, 
+	PLANE_FRONT, 
+	ON_PLANE
+};
+inline span_type whereIsPoint(Vector2D point,
+	Vector2D PointOnPlane, //Cualquier punto del plano
 	Vector2D PlaneNormal)
 {
 	Vector2D dir = PointOnPlane - point;
 
-	double d = dir.Dot(PlaneNormal);
+	double d = dir.dot(PlaneNormal);
 
-	if (d<-0.000001)
+	if (d < -0.000001)
 	{
-		return plane_front;
+		return PLANE_FRONT;
 	}
 
-	else if (d>0.000001)
+	else if (d  > 0.000001)
 	{
-		return plane_backside;
+		return PLANE_BACKSIDE;
 	}
 
-	return on_plane;
+	return ON_PLANE;
 }
