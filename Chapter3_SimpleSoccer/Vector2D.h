@@ -1,12 +1,7 @@
-/*
- * Vector2D.h
- *
- *  Created on: 01/05/2017
- *      Author: dante
- */
-
 #ifndef VECTOR2D_H_
 #define VECTOR2D_H_
+
+//Carries out the vector2D class and some methods
 
 #include <iosfwd>
 #include <limits>
