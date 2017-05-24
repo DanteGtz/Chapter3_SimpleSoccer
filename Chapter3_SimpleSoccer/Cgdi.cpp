@@ -1,11 +1,10 @@
 #include "Cgdi.h"
 
 //The instance method, cto and dto  of the Cgdi class
-//--------------------------- Instance ----------------------------------------
-//
-//   this class is a singleton
-//-----------------------------------------------------------------------------
-Cgdi* Cgdi::Instance()
+//-----------------> Define algunos colores <----------------//
+
+//Esta clase es un singleton
+Cgdi* Cgdi::instance()
 {
 	static Cgdi instance;
 	return &instance;
@@ -13,39 +12,39 @@ Cgdi* Cgdi::Instance()
 
 Cgdi::Cgdi()
 {
-	m_BlackPen = CreatePen(PS_SOLID, 1, colors[black]);
-	m_WhitePen = CreatePen(PS_SOLID, 1, colors[white]);
-	m_RedPen = CreatePen(PS_SOLID, 1, colors[red]);
-	m_GreenPen = CreatePen(PS_SOLID, 1, colors[green]);
-	m_BluePen = CreatePen(PS_SOLID, 1, colors[blue]);
-	m_GreyPen = CreatePen(PS_SOLID, 1, colors[grey]);
-	m_PinkPen = CreatePen(PS_SOLID, 1, colors[pink]);
-	m_YellowPen = CreatePen(PS_SOLID, 1, colors[yellow]);
-	m_OrangePen = CreatePen(PS_SOLID, 1, colors[orange]);
-	m_PurplePen = CreatePen(PS_SOLID, 1, colors[purple]);
-	m_BrownPen = CreatePen(PS_SOLID, 1, colors[brown]);
+	m_BlackPen = CreatePen(PS_SOLID, 1, colors[BLACK]);
+	m_WhitePen = CreatePen(PS_SOLID, 1, colors[WHITE]);
+	m_RedPen = CreatePen(PS_SOLID, 1, colors[RED]);
+	m_GreenPen = CreatePen(PS_SOLID, 1, colors[GREEN]);
+	m_BluePen = CreatePen(PS_SOLID, 1, colors[BLUE]);
+	m_GreyPen = CreatePen(PS_SOLID, 1, colors[GREY]);
+	m_PinkPen = CreatePen(PS_SOLID, 1, colors[PINK]);
+	m_YellowPen = CreatePen(PS_SOLID, 1, colors[YELLOW]);
+	m_OrangePen = CreatePen(PS_SOLID, 1, colors[ORANGE]);
+	m_PurplePen = CreatePen(PS_SOLID, 1, colors[PURPLE]);
+	m_BrownPen = CreatePen(PS_SOLID, 1, colors[BROWN]);
 
-	m_DarkGreenPen = CreatePen(PS_SOLID, 1, colors[dark_green]);
+	m_DarkGreenPen = CreatePen(PS_SOLID, 1, colors[DARK_GREEN]);
 
-	m_LightBluePen = CreatePen(PS_SOLID, 1, colors[light_blue]);
-	m_LightGreyPen = CreatePen(PS_SOLID, 1, colors[light_grey]);
-	m_LightPinkPen = CreatePen(PS_SOLID, 1, colors[light_pink]);
+	m_LightBluePen = CreatePen(PS_SOLID, 1, colors[LIGHT_BLUE]);
+	m_LightGreyPen = CreatePen(PS_SOLID, 1, colors[LIGHT_GREY]);
+	m_LightPinkPen = CreatePen(PS_SOLID, 1, colors[LIGHT_PINK]);
 
-	m_ThickBlackPen = CreatePen(PS_SOLID, 2, colors[black]);
-	m_ThickWhitePen = CreatePen(PS_SOLID, 2, colors[white]);
-	m_ThickRedPen = CreatePen(PS_SOLID, 2, colors[red]);
-	m_ThickGreenPen = CreatePen(PS_SOLID, 2, colors[green]);
-	m_ThickBluePen = CreatePen(PS_SOLID, 2, colors[blue]);
+	m_ThickBlackPen = CreatePen(PS_SOLID, 2, colors[BLACK]);
+	m_ThickWhitePen = CreatePen(PS_SOLID, 2, colors[WHITE]);
+	m_ThickRedPen = CreatePen(PS_SOLID, 2, colors[RED]);
+	m_ThickGreenPen = CreatePen(PS_SOLID, 2, colors[GREEN]);
+	m_ThickBluePen = CreatePen(PS_SOLID, 2, colors[BLUE]);
 
-	m_GreenBrush = CreateSolidBrush(colors[green]);
-	m_RedBrush = CreateSolidBrush(colors[red]);
-	m_BlueBrush = CreateSolidBrush(colors[blue]);
-	m_GreyBrush = CreateSolidBrush(colors[grey]);
-	m_BrownBrush = CreateSolidBrush(colors[brown]);
-	m_YellowBrush = CreateSolidBrush(colors[yellow]);
+	m_GreenBrush = CreateSolidBrush(colors[GREEN]);
+	m_RedBrush = CreateSolidBrush(colors[RED]);
+	m_BlueBrush = CreateSolidBrush(colors[BLUE]);
+	m_GreyBrush = CreateSolidBrush(colors[GREY]);
+	m_BrownBrush = CreateSolidBrush(colors[BROWN]);
+	m_YellowBrush = CreateSolidBrush(colors[YELLOW]);
 	m_LightBlueBrush = CreateSolidBrush(RGB(0, 255, 255));
-	m_DarkGreenBrush = CreateSolidBrush(colors[dark_green]);
-	m_OrangeBrush = CreateSolidBrush(colors[orange]);
+	m_DarkGreenBrush = CreateSolidBrush(colors[DARK_GREEN]);
+	m_OrangeBrush = CreateSolidBrush(colors[ORANGE]);
 
 	m_hdc = NULL;
 }
