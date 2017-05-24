@@ -2,19 +2,6 @@
 #ifndef CGDI_H
 #define CGDI_H
 //Carries out all the graphic interface of our application
-//------------------------------------------------------------------------
-//
-//  Name:   Cgdi.h
-//
-//  Desc:   A singleton class to help alleviate the tedium of using the
-//          GDI. Call each method using the #define for gdi->
-//          eg gdi->Line(10, 20, 300, 300)
-//          You must always call gdi->StartDrawing() prior to any 
-//          rendering, and isComplete any rendering with gdi->StopDrawing()
-//
-//  Author: Mat Buckland 2001 (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
 #include <windows.h>
 #include <string>
 #include <vector>
@@ -22,8 +9,7 @@
 
 #include "Vector2D.h"
 
-
-//------------------------------- define some colors
+//-----------------> Define algunos colores <----------------//
 const int NumColors = 15;
 
 const COLORREF colors[NumColors] =
@@ -39,15 +25,15 @@ const COLORREF colors[NumColors] =
 	RGB(255,0,170),
 	RGB(133,90,0),
 	RGB(255,255,255),
-	RGB(0, 100, 0),        //dark green
-	RGB(0, 255, 255),       //light blue
-	RGB(200, 200, 200),     //light grey
-	RGB(255, 230, 230)      //light pink
+	RGB(0, 100, 0),        
+	RGB(0, 255, 255),      
+	RGB(200, 200, 200),     
+	RGB(255, 230, 230)      
 };
 
 
-//make life easier on the fingers
-#define gdi Cgdi::Instance()
+//Ahora llamar a la clase es mas facil
+#define gdi Cgdi::instance()
 
 class Cgdi
 {
@@ -55,25 +41,25 @@ public:
 
 	int NumPenColors()const { return NumColors; }
 
-	//enumerate some colors
+	//Enumera los colores
 	enum
 	{
-		red,
-		blue,
-		green,
-		black,
-		pink,
-		grey,
-		yellow,
-		orange,
-		purple,
-		brown,
-		white,
-		dark_green,
-		light_blue,
-		light_grey,
-		light_pink,
-		hollow
+		RED,
+		BLUE,
+		GREEN,
+		BLACK,
+		PINK,
+		GREY,
+		YELLOW,
+		ORANGE,
+		PURPLE,
+		BROWN,
+		WHITE,
+		DARK_GREEN,
+		LIGHT_BLUE,
+		LIGHT_GREY,
+		LIGHT_PINK,
+		HOLLOW
 	};
 
 
@@ -82,7 +68,7 @@ private:
 
 	HPEN m_OldPen;
 
-	//all the pens
+	//Todos los lapices
 	HPEN   m_BlackPen;
 	HPEN   m_WhitePen;
 	HPEN   m_RedPen;
@@ -108,7 +94,7 @@ private:
 
 	HBRUSH m_OldBrush;
 
-	//all the brushes
+	//Todas las brochas
 	HBRUSH  m_RedBrush;
 	HBRUSH  m_GreenBrush;
 	HBRUSH  m_BlueBrush;
@@ -122,10 +108,10 @@ private:
 
 	HDC    m_hdc;
 
-	//constructor is private
+	//Construccion debe ser privado
 	Cgdi();
 
-	//copy ctor and assignment should be private
+	//Los constructores copia, asignacion deben ser privados
 	Cgdi(const Cgdi&);
 	Cgdi& operator=(const Cgdi&);
 
@@ -133,7 +119,7 @@ public:
 
 	~Cgdi();
 
-	static Cgdi* Instance();
+	static Cgdi* instance();
 
 	void BlackPen() { if (m_hdc) { SelectObject(m_hdc, m_BlackPen); } }
 	void WhitePen() { if (m_hdc) { SelectObject(m_hdc, m_WhitePen); } }
@@ -173,16 +159,16 @@ public:
 
 
 
-	//ALWAYS call this before drawing
+	//SIEMPRE se debe llamar antes de comenzar a pintar
 	void StartDrawing(HDC hdc)
 	{
 		assert(m_hdc == NULL);
 
 		m_hdc = hdc;
 
-		//get the current pen
+		//Llama al lapiz actual
 		m_OldPen = (HPEN)SelectObject(hdc, m_BlackPen);
-		//select it back in
+		//Lo Selecciona de nuevo
 		SelectObject(hdc, m_OldPen);
 
 		m_OldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
@@ -191,7 +177,7 @@ public:
 
 
 
-	//ALWAYS call this after drawing
+	//SIEMPRE se debe llamar antes de terminar a pintar
 	void StopDrawing(HDC hdc)
 	{
 		assert(hdc != NULL);
@@ -204,7 +190,7 @@ public:
 	}
 
 
-	//---------------------------Text
+	//-----------------> Texto <----------------//
 
 	void TextAtPos(int x, int y, const std::string &s)
 	{
@@ -229,7 +215,7 @@ public:
 	void TextColor(int r, int g, int b) { SetTextColor(m_hdc, RGB(r, g, b)); }
 
 
-	//----------------------------pixels
+	//-----------------> Pixeles <----------------//
 	void DrawDot(Vector2D pos, COLORREF color)
 	{
 		SetPixel(m_hdc, (int)pos.x, (int)pos.y, color);
@@ -240,7 +226,7 @@ public:
 		SetPixel(m_hdc, x, y, color);
 	}
 
-	//-------------------------Line Drawing
+	//-----------------> Dibujar lineas <----------------//
 
 	void Line(Vector2D from, Vector2D to)
 	{
@@ -264,7 +250,7 @@ public:
 
 	void PolyLine(const std::vector<Vector2D>& points)
 	{
-		//make sure we have at least 2 points
+		//Se asegura de tener al menos dos puntos
 		if (points.size() < 2) return;
 
 		MoveToEx(m_hdc, (int)points[0].x, (int)points[0].y, NULL);
@@ -277,20 +263,20 @@ public:
 
 	void LineWithArrow(Vector2D from, Vector2D to, double size)
 	{
-		Vector2D norm = Vec2DNormalize(to - from);
+		Vector2D norm = vec2DNormalize(to - from);
 
-		//calculate where the arrow is attached
+		//Calcula donde esta anclada la flecha
 		Vector2D CrossingPoint = to - (norm * size);
 
-		//calculate the two extra points required to make the arrowhead
-		Vector2D ArrowPoint1 = CrossingPoint + (norm.Perp() * 0.4f * size);
-		Vector2D ArrowPoint2 = CrossingPoint - (norm.Perp() * 0.4f * size);
+		//Calcula dos puntos mas para dibujar la cabeza de la flecha
+		Vector2D ArrowPoint1 = CrossingPoint + (norm.perp() * 0.4f * size);
+		Vector2D ArrowPoint2 = CrossingPoint - (norm.perp() * 0.4f * size);
 
-		//draw the line
+		//dibuja la linea
 		MoveToEx(m_hdc, (int)from.x, (int)from.y, NULL);
 		LineTo(m_hdc, (int)CrossingPoint.x, (int)CrossingPoint.y);
 
-		//draw the arrowhead (filled with the currently selected brush)
+		//Dibuja la flecha con el color actual
 		POINT p[3];
 
 		p[0] = VectorToPOINT(ArrowPoint1);
@@ -308,8 +294,7 @@ public:
 		Line((int)pos.x - diameter, (int)pos.y + diameter, (int)pos.x + diameter, (int)pos.y - diameter);
 	}
 
-
-	//---------------------Geometry drawing methods
+	//-----------------> Metodos para dibujar fig geometricas <----------------//
 
 	void Rect(int left, int top, int right, int bot)
 	{
@@ -370,22 +355,35 @@ public:
 
 		switch (color)
 		{
-		case black:BlackPen(); return;
-
-		case white:WhitePen(); return;
-		case red: RedPen(); return;
-		case green: GreenPen(); return;
-		case blue: BluePen(); return;
-		case pink: PinkPen(); return;
-		case grey: GreyPen(); return;
-		case yellow: YellowPen(); return;
-		case orange: OrangePen(); return;
-		case purple: PurplePen(); return;
-		case brown: BrownPen(); return;
-		case light_blue: LightBluePen(); return;
-		case light_grey: LightGreyPen(); return;
-		case light_pink: LightPinkPen(); return;
-		}//end switch
+		case BLACK:
+			BlackPen(); return;
+		case WHITE:
+			WhitePen(); return;
+		case RED: 
+			RedPen(); return;
+		case GREEN:
+			GreenPen(); return;
+		case BLUE: 
+			BluePen(); return;
+		case PINK: 
+			PinkPen(); return;
+		case GREY: 
+			GreyPen(); return;
+		case YELLOW: 
+			YellowPen(); return;
+		case ORANGE: 
+			OrangePen(); return;
+		case PURPLE: 
+			PurplePen(); return;
+		case BROWN:
+			BrownPen(); return;
+		case LIGHT_BLUE:
+			LightBluePen(); return;
+		case LIGHT_GREY: 
+			LightGreyPen(); return;
+		case LIGHT_PINK:
+			LightPinkPen(); return;
+		}//Fin del switch
 	}
 };
 
