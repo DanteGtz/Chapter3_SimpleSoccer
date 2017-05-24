@@ -1,5 +1,7 @@
 #pragma once
 
+//Store numerical methods
+
 #include <math.h>
 #include <sstream>
 #include <string>
@@ -94,6 +96,11 @@ inline bool randBool()
 		return true;
 	else
 		return false;
+}
+
+inline double randInRange(double x, double y)
+{
+	return x + randFloat()*(y - x);
 }
 
 //Regresa un doble generado aleatoriamente 
