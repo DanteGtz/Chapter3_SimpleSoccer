@@ -10,9 +10,9 @@
 #include "Vector2D.h"
 
 //-----------------> Define algunos colores <----------------//
-const int NumColors = 15;
+const int numColors = 15;
 
-const COLORREF colors[NumColors] =
+const COLORREF colors[numColors] =
 {
 	RGB(255,0,0),
 	RGB(0,0,255),
@@ -39,7 +39,7 @@ class Cgdi
 {
 public:
 
-	int NumPenColors()const { return NumColors; }
+	int getNumPenColors()const { return numColors; }
 
 	//Enumera los colores
 	enum
@@ -160,7 +160,7 @@ public:
 
 
 	//SIEMPRE se debe llamar antes de comenzar a pintar
-	void StartDrawing(HDC hdc)
+	void startDrawing(HDC hdc)
 	{
 		assert(m_hdc == NULL);
 
@@ -178,7 +178,7 @@ public:
 
 
 	//SIEMPRE se debe llamar antes de terminar a pintar
-	void StopDrawing(HDC hdc)
+	void stopDrawing(HDC hdc)
 	{
 		assert(hdc != NULL);
 
@@ -192,55 +192,55 @@ public:
 
 	//-----------------> Texto <----------------//
 
-	void TextAtPos(int x, int y, const std::string &s)
+	void textAtPos(int x, int y, const std::string &s)
 	{
 		TextOut(m_hdc, x, y, s.c_str(), s.size());
 	}
 
-	void TextAtPos(double x, double y, const std::string &s)
+	void textAtPos(double x, double y, const std::string &s)
 	{
 		TextOut(m_hdc, (int)x, (int)y, s.c_str(), s.size());
 	}
 
-	void TextAtPos(Vector2D pos, const std::string &s)
+	void textAtPos(Vector2D pos, const std::string &s)
 	{
 		TextOut(m_hdc, (int)pos.x, (int)pos.y, s.c_str(), s.size());
 	}
 
-	void TransparentText() { SetBkMode(m_hdc, TRANSPARENT); }
+	void transparentText() { SetBkMode(m_hdc, TRANSPARENT); }
 
-	void OpaqueText() { SetBkMode(m_hdc, OPAQUE); }
+	void opaqueText() { SetBkMode(m_hdc, OPAQUE); }
 
-	void TextColor(int color) { assert(color < NumColors); SetTextColor(m_hdc, colors[color]); }
-	void TextColor(int r, int g, int b) { SetTextColor(m_hdc, RGB(r, g, b)); }
+	void textColor(int color) { assert(color < numColors); SetTextColor(m_hdc, colors[color]); }
+	void textColor(int r, int g, int b) { SetTextColor(m_hdc, RGB(r, g, b)); }
 
 
 	//-----------------> Pixeles <----------------//
-	void DrawDot(Vector2D pos, COLORREF color)
+	void drawDot(Vector2D pos, COLORREF color)
 	{
 		SetPixel(m_hdc, (int)pos.x, (int)pos.y, color);
 	}
 
-	void DrawDot(int x, int y, COLORREF color)
+	void drawDot(int x, int y, COLORREF color)
 	{
 		SetPixel(m_hdc, x, y, color);
 	}
 
 	//-----------------> Dibujar lineas <----------------//
 
-	void Line(Vector2D from, Vector2D to)
+	void line(Vector2D from, Vector2D to)
 	{
 		MoveToEx(m_hdc, (int)from.x, (int)from.y, NULL);
 		LineTo(m_hdc, (int)to.x, (int)to.y);
 	}
 
-	void Line(int a, int b, int x, int y)
+	void line(int a, int b, int x, int y)
 	{
 		MoveToEx(m_hdc, a, b, NULL);
 		LineTo(m_hdc, x, y);
 	}
 
-	void Line(double a, double b, double x, double y)
+	void line(double a, double b, double x, double y)
 	{
 		MoveToEx(m_hdc, (int)a, (int)b, NULL);
 		LineTo(m_hdc, (int)x, (int)y);
@@ -248,7 +248,7 @@ public:
 
 
 
-	void PolyLine(const std::vector<Vector2D>& points)
+	void polyLine(const std::vector<Vector2D>& points)
 	{
 		//Se asegura de tener al menos dos puntos
 		if (points.size() < 2) return;
@@ -261,7 +261,7 @@ public:
 		}
 	}
 
-	void LineWithArrow(Vector2D from, Vector2D to, double size)
+	void lineWithArrow(Vector2D from, Vector2D to, double size)
 	{
 		Vector2D norm = vec2DNormalize(to - from);
 
@@ -290,25 +290,25 @@ public:
 
 	void Cross(Vector2D pos, int diameter)
 	{
-		Line((int)pos.x - diameter, (int)pos.y - diameter, (int)pos.x + diameter, (int)pos.y + diameter);
-		Line((int)pos.x - diameter, (int)pos.y + diameter, (int)pos.x + diameter, (int)pos.y - diameter);
+		line((int)pos.x - diameter, (int)pos.y - diameter, (int)pos.x + diameter, (int)pos.y + diameter);
+		line((int)pos.x - diameter, (int)pos.y + diameter, (int)pos.x + diameter, (int)pos.y - diameter);
 	}
 
 	//-----------------> Metodos para dibujar fig geometricas <----------------//
 
-	void Rect(int left, int top, int right, int bot)
+	void rect(int left, int top, int right, int bot)
 	{
 		Rectangle(m_hdc, left, top, right, bot);
 	}
 
-	void Rect(double left, double top, double right, double bot)
+	void rect(double left, double top, double right, double bot)
 	{
 		Rectangle(m_hdc, (int)left, (int)top, (int)right, (int)bot);
 	}
 
 
 
-	void ClosedShape(const std::vector<Vector2D> &points)
+	void closedShape(const std::vector<Vector2D> &points)
 	{
 		MoveToEx(m_hdc, (int)points[0].x, (int)points[0].y, NULL);
 
@@ -321,7 +321,7 @@ public:
 	}
 
 
-	void Circle(Vector2D pos, double radius)
+	void circle(Vector2D pos, double radius)
 	{
 		Ellipse(m_hdc,
 			(int)(pos.x - radius),
@@ -330,7 +330,7 @@ public:
 			(int)(pos.y + radius + 1));
 	}
 
-	void Circle(double x, double y, double radius)
+	void circle(double x, double y, double radius)
 	{
 		Ellipse(m_hdc,
 			(int)(x - radius),
@@ -339,7 +339,7 @@ public:
 			(int)(y + radius + 1));
 	}
 
-	void Circle(int x, int y, double radius)
+	void circle(int x, int y, double radius)
 	{
 		Ellipse(m_hdc,
 			(int)(x - radius),
@@ -349,9 +349,9 @@ public:
 	}
 
 
-	void SetPenColor(int color)
+	void setPenColor(int color)
 	{
-		assert(color < NumColors);
+		assert(color < numColors);
 
 		switch (color)
 		{
