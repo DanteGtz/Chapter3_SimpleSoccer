@@ -3,23 +3,14 @@
 #define ENTITYMANAGER_H
 #pragma warning (disable:4786)
 //Keeps control of Every entity that exists in the game
-//------------------------------------------------------------------------
-//
-//  Name:   EntityManager.h
-//
-//  Desc:   Singleton class to handle the  management of Entities.          
-//
-//  Author: Mat Buckland (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
 #include <map>
 #include <cassert>
 
 
 class BaseGameEntity;
 
-//provide easy access
-#define EntityMgr EntityManager::Instance()
+//provee de un macro de facil acceso
+#define EntityMgr EntityManager::instance()
 
 
 
@@ -31,33 +22,35 @@ private:
 
 private:
 
-	//to facilitate quick lookup the entities are stored in a std::map, in which
-	//pointers to entities are cross referenced by their identifying number
+	//Para facilitar de un revision rapida de las identidades, estas
+	//son almacenadas en un std::map, en el cual los apuntadores de las
+	//entidades estan referenciados por su numero de identificacion
 	EntityMap m_EntityMap;
 
 	EntityManager() {}
 
-	//copy ctor and assignment should be private
+	//Los ctores copia y asignacion deben ser privados
 	EntityManager(const EntityManager&);
 	EntityManager& operator=(const EntityManager&);
 
 public:
 
-	static EntityManager* Instance();
+	static EntityManager* instance();
 
-	//this method stores a pointer to the entity in the std::vector
-	//m_Entities at the index position indicated by the entity's ID
-	//(makes for faster access)
-	void            RegisterEntity(BaseGameEntity* NewEntity);
+	//Este metodo almacena un apuntador a la entidad, en un 
+	//std::vector m_Entities con el indice indicando el ID
+	//de la entidad (para un acceso mas rapido)
+	void            registerEntity(BaseGameEntity* NewEntity);
 
-	//returns a pointer to the entity with the ID given as a parameter
-	BaseGameEntity* GetEntityFromID(int id)const;
+	//Regresa un apuntador a la entidad, localizada
+	//por medio de su ID como parametro
+	BaseGameEntity* getEntityFromID(int id)const;
 
-	//this method removes the entity from the list
-	void            RemoveEntity(BaseGameEntity* pEntity);
+	//Este metodo remueve una entidad de la lista
+	void            removeEntity(BaseGameEntity* pEntity);
 
-	//clears all entities from the entity map
-	void            Reset() { m_EntityMap.clear(); }
+	//Limpia todas las entidades del mapa
+	void            reset() { m_EntityMap.clear(); }
 };
 
 
