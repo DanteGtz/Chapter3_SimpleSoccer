@@ -1,18 +1,19 @@
 #include <windows.h>
 
-#include "../misc/WindowUtils.h"
-#include "../2D/Vector2D.h"
-#include "../misc/utils.h"
-#include "../misc/Stream_Utility_Functions.h"
+#include "WindowUtils.h"
+#include "Vector2D.h"
+#include "utils.h"
+#include "Stream_Utility_Functions.h"
 
 //Definition of the WU member methods
 
-//---------------------- ChangeMenuState ---------------------------------
-//
-//  Changes the state of a menu item given the item identifier, the 
-//  desired state and the HWND of the menu owner
-//------------------------------------------------------------------------
-void ChangeMenuState(HWND hwnd, UINT MenuItem, UINT state)
+
+//-----------------> Cambia el estado del menu <----------------//
+
+//Cambia el estado del item menu dados el identificador de
+//un segundo item, el estado deseado, y el HWND del menu
+//del usuario
+void changeMenuState(HWND hwnd, UINT menuItem, UINT state)
 {
 	MENUITEMINFO mi;
 
@@ -20,59 +21,66 @@ void ChangeMenuState(HWND hwnd, UINT MenuItem, UINT state)
 	mi.fMask = MIIM_STATE;
 	mi.fState = state;
 
-	SetMenuItemInfo(GetMenu(hwnd), MenuItem, false, &mi);
+	SetMenuItemInfo(GetMenu(hwnd), menuItem, false, &mi);
 	DrawMenuBar(hwnd);
 }
 
-//-------------------- CheckMenuItemAppropriately ----------------------------
-//
-//  if b is true MenuItem is checked, otherwise it is unchecked
-//-----------------------------------------------------------------------------
-void CheckMenuItemAppropriately(HWND hwnd, UINT MenuItem, bool b)
+
+
+//-----------------> Cambia el estado del menu <----------------//
+
+//Si b es verdaderdo, la variable menuItem se verifica
+//se deja sin verificar
+void checkMenuItemAppropriately(HWND hwnd, UINT menuItem, bool b)
 {
 	if (b)
 	{
-		ChangeMenuState(hwnd, MenuItem, MFS_CHECKED);
+		changeMenuState(hwnd, menuItem, MFS_CHECKED);
 	}
 	else
 	{
-		ChangeMenuState(hwnd, MenuItem, MFS_UNCHECKED);
+		changeMenuState(hwnd, menuItem, MFS_UNCHECKED);
 	}
 }
 
 
-//--------------------- CheckBufferLength --------------------------------
-//
-//  this is a replacement for the StringCchLength function found in the 
-//  platform SDK. See MSDN for details. Only ever used for checking toolbar
-//  strings
-//------------------------------------------------------------------------
-bool CheckBufferLength(char* buff, int MaxLength, int& BufferLength)
+
+//-----------------> checa la longitud del buffer <----------------//
+
+//Esta funcion es un remplazo del metodo StringCchLength que encontramos
+//en el SDK de la plataforma windows. Puedes visitar MSDN para mas
+//detalles. Solo se utiliza para checar las cadenas de la barra de 
+//herramientas
+bool checkBufferLength(char* buff, int maxLength, unsigned int& bufferLength)
 {
 	std::string s = ttos(buff);
 
-	BufferLength = s.length();
+	bufferLength = s.length();
 
-	if (BufferLength > MaxLength)
+	if (bufferLength > maxLength)
 	{
-		BufferLength = 0; return false;
+		bufferLength = 0; 
+		return false;
 	}
 
 	return true;
 }
 
-void ErrorBox(std::string& msg)
+
+void errorBox(std::string& msg)
 {
 	MessageBox(NULL, msg.c_str(), "Error", MB_OK);
 }
 
-void ErrorBox(char* msg)
+void errorBox(char* msg)
 {
 	MessageBox(NULL, msg, "Error", MB_OK);
 }
 
-//gets the coordinates of the cursor relative to an active window 
-Vector2D GetClientCursorPosition()
+
+//Obtiene las coordenadas del cursor relativo a la ventana
+//activa
+Vector2D getClientCursorPosition()
 {
 	POINT MousePos;
 
@@ -84,7 +92,7 @@ Vector2D GetClientCursorPosition()
 }
 
 
-Vector2D GetClientCursorPosition(HWND hwnd)
+Vector2D getClientCursorPosition(HWND hwnd)
 {
 	POINT MousePos;
 
@@ -96,12 +104,10 @@ Vector2D GetClientCursorPosition(HWND hwnd)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  The following 3 functions are taken from Petzold's book and enable the 
-//  client to use the file dialog common control
-//-----------------------------------------------------------------------------
-void FileInitialize(HWND hwnd,
+
+//Estos metodos abren el common dialog box para obtener un 
+//nombre de archivo
+void fileInitialize(HWND hwnd,
 	OPENFILENAME& ofn,
 	const std::string& defaultFileTypeDescription,
 	const std::string& defaultFileExtension)
@@ -123,13 +129,13 @@ void FileInitialize(HWND hwnd,
 	ofn.lpstrCustomFilter = NULL;
 	ofn.nMaxCustFilter = 0;
 	ofn.nFilterIndex = 0;
-	ofn.lpstrFile = NULL;          // Set in Open and Close functions
+	ofn.lpstrFile = NULL;				//Establece las funcione Open y Close
 	ofn.nMaxFile = MAX_PATH;
-	ofn.lpstrFileTitle = NULL;          // Set in Open and Close functions
+	ofn.lpstrFileTitle = NULL;          //Establece las funcione Open y Close
 	ofn.nMaxFileTitle = MAX_PATH;
 	ofn.lpstrInitialDir = NULL;
 	ofn.lpstrTitle = NULL;
-	ofn.Flags = 0;             // Set in Open and Close functions
+	ofn.Flags = 0;						//Establece las funcione Open y Close
 	ofn.nFileOffset = 0;
 	ofn.nFileExtension = 0;
 	ofn.lpstrDefExt = defaultFileExtension.c_str();
@@ -141,7 +147,7 @@ void FileInitialize(HWND hwnd,
 
 
 
-BOOL FileOpenDlg(HWND               hwnd,
+BOOL fileOpenDlg(HWND               hwnd,
 	PTSTR              pstrFileName,
 	PTSTR              pstrTitleName,
 	const std::string& defaultFileTypeDescription,
@@ -149,7 +155,7 @@ BOOL FileOpenDlg(HWND               hwnd,
 {
 	OPENFILENAME ofn;
 
-	FileInitialize(hwnd, ofn, defaultFileTypeDescription, defaultFileExtension);
+	fileInitialize(hwnd, ofn, defaultFileTypeDescription, defaultFileExtension);
 
 	ofn.hwndOwner = hwnd;
 	ofn.lpstrFile = pstrFileName;
@@ -159,13 +165,15 @@ BOOL FileOpenDlg(HWND               hwnd,
 	return GetOpenFileName(&ofn);
 }
 
-BOOL FileSaveDlg(HWND               hwnd,
+BOOL fileSaveDlg(HWND               hwnd,
 	PTSTR              pstrFileName,
 	PTSTR              pstrTitleName,
 	const std::string& defaultFileTypeDescription,
 	const std::string& defaultFileExtension)
 {
-	OPENFILENAME ofn; FileInitialize(hwnd, ofn, defaultFileTypeDescription, defaultFileExtension);
+	OPENFILENAME ofn;
+	fileInitialize(hwnd, ofn, defaultFileTypeDescription,
+		defaultFileExtension);
 
 	ofn.hwndOwner = hwnd;
 	ofn.lpstrFile = pstrFileName;
@@ -175,31 +183,34 @@ BOOL FileSaveDlg(HWND               hwnd,
 	return GetSaveFileName(&ofn);
 }
 
-//-------------------------- ResizeWindow -------------------------------------
-//
-//  call this to resize the active window to the specified size
-//-----------------------------------------------------------------------------
-void ResizeWindow(HWND hwnd, int cx, int cy)
+
+//-----------------> redimensiona la ventana <----------------//
+
+//Funcion que al invocarse cambia las medidas de la pantalla
+//especificas por los argumentos
+void resizeWindow(HWND hwnd, int cx, int cy)
 {
-	//does this window have a menu. If so set a flag to true
+	//Esta ventana tiene menu? Si es asi, la bandera
+	//se activa
 	HMENU hwndMenu = GetMenu(hwnd);
 	bool bMenu = false;
 	if (hwndMenu) bMenu = true;
 
-	//create a rect of the desired window size
+	//Crea unrectangulo con las medidas deseadas
 	RECT DesiredSize;
 	DesiredSize.left = 0;
 	DesiredSize.top = 0;
 	DesiredSize.right = cx;
 	DesiredSize.bottom = cy;
 
-	//determine the size the window should be given the desired client area
+	//Determina las medidas de la pantalla, deseadas
+	//por el usuario
 	AdjustWindowRectEx(&DesiredSize,
 		WS_OVERLAPPED | WS_VISIBLE | WS_CAPTION | WS_SYSMENU,
 		bMenu,
 		NULL);
 
-	//resize the window to fit
+	//Redimentsiona la ventana para que encaje
 	SetWindowPos(hwnd,
 		NULL,
 		GetSystemMetrics(SM_CXSCREEN) / 2 - cx / 2,
@@ -209,9 +220,11 @@ void ResizeWindow(HWND hwnd, int cx, int cy)
 		SWP_NOZORDER);
 }
 
-//------------------------- GetWindowHeight -----------------------------------
-//-----------------------------------------------------------------------------
-int  GetWindowHeight(HWND hwnd)
+
+
+//-----------------> obtiene la altura de la pantalla<----------------//
+
+int  getWindowHeight(HWND hwnd)
 {
 	if (hwnd == 0) return 0;
 
@@ -222,9 +235,11 @@ int  GetWindowHeight(HWND hwnd)
 	return windowRect.bottom - windowRect.top;
 }
 
-//------------------------- GetWindowWidth  -----------------------------------
-//-----------------------------------------------------------------------------
-int  GetWindowWidth(HWND hwnd)
+
+
+//-----------------> obtiene el ancho de la ventana <----------------//
+
+int  getWindowWidth(HWND hwnd)
 {
 	if (hwnd == 0) return 0;
 
