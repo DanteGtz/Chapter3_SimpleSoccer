@@ -145,15 +145,36 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseGameEntity.h" />
     <ClInclude Include="C2DMatrix.h" />
+    <ClInclude Include="Cgdi.h" />
     <ClInclude Include="Chapter3_SimpleSoccer.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="DebugConsole.h" />
+    <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="geometry.h" />
+    <ClInclude Include="MovingEntity.h" />
+    <ClInclude Include="ParamLoader.h" />
+    <ClInclude Include="Region.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SoccerBall.h" />
+    <ClInclude Include="SoccerMessages.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Stream_Utility_Functions.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Wall2D.h" />
+    <ClInclude Include="WallIntersectionTests.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseGameEntity.cpp" />
+    <ClCompile Include="Cgdi.cpp" />
     <ClCompile Include="Chapter3_SimpleSoccer.cpp" />
+    <ClCompile Include="DebugConsole.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="ParamLoader.cpp" />
+    <ClCompile Include="SoccerBall.cpp" />
+    <ClCompile Include="SoccerMessages.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

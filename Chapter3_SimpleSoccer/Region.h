@@ -1,30 +1,25 @@
 #pragma once
 #ifndef REGION_H
 #define REGION_H
-//------------------------------------------------------------------------
-//
-//  Name:   Region.h
-//
-//  Desc:   Defines a rectangular region. A region has an identifying
-//          number, and four corners.
-//
-//  Author: Mat Buckland (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
+//Defines a rectangular region.
 
 #include <math.h>
 
-#include "../2D/Vector2D.h"
-#include "../misc/Cgdi.h"
-#include "../misc/utils.h"
-#include "../misc/Stream_Utility_Functions.h"
+#include "Vector2D.h"
+#include "Cgdi.h"
+#include "utils.h"
+#include "Stream_Utility_Functions.h"
 
 
 class Region
 {
 public:
 
-	enum region_modifier { halfsize, normal };
+	enum region_modifier 
+	{ 
+		HALF_SIZE,
+		NORMAL 
+	};
 
 protected:
 
@@ -46,18 +41,16 @@ public:
 	{}
 
 
-	Region(double left,
-		double top,
-		double right,
-		double bottom,
-		int id = -1) :m_dTop(top),
-		m_dRight(right),
-		m_dLeft(left),
-		m_dBottom(bottom),
-		m_iID(id)
+	Region(double left, double top, double right,
+		double bottom, int id = -1) 
+			:m_dTop(top),
+			m_dRight(right),
+			m_dLeft(left),
+			m_dBottom(bottom),
+			m_iID(id)
 	{
-		//calculate center of region
-		m_vCenter = Vector2D((left + right)*0.5, (top + bottom)*0.5);
+		//Calcula el centro de la region
+		m_vCenter = Vector2D((left + right) * 0.5, (top + bottom) * 0.5);
 
 		m_dWidth = fabs(right - left);
 		m_dHeight = fabs(bottom - top);
@@ -65,7 +58,8 @@ public:
 
 	virtual ~Region() {}
 
-	virtual inline void     Render(bool ShowID)const;
+	virtual inline void     render(bool ShowID)const;
+
 
 	//returns true if the given position lays inside the region. The
 	//region modifier can be used to contract the region bounderies
@@ -94,13 +88,13 @@ public:
 
 inline Vector2D Region::GetRandomPosition()const
 {
-	return Vector2D(RandInRange(m_dLeft, m_dRight),
-		RandInRange(m_dTop, m_dBottom));
+	return Vector2D(randInRange(m_dLeft, m_dRight),
+		randInRange(m_dTop, m_dBottom));
 }
 
-inline bool Region::Inside(Vector2D pos, region_modifier r = normal)const
+inline bool Region::Inside(Vector2D pos, region_modifier r = NORMAL)const
 {
-	if (r == normal)
+	if (r == NORMAL)
 	{
 		return ((pos.x > m_dLeft) && (pos.x < m_dRight) &&
 			(pos.y > m_dTop) && (pos.y < m_dBottom));
@@ -116,16 +110,16 @@ inline bool Region::Inside(Vector2D pos, region_modifier r = normal)const
 
 }
 
-inline void Region::Render(bool ShowID = 0)const
+inline void Region::render(bool ShowID = 0)const
 {
 	gdi->HollowBrush();
 	gdi->GreenPen();
-	gdi->Rect(m_dLeft, m_dTop, m_dRight, m_dBottom);
+	gdi->rect(m_dLeft, m_dTop, m_dRight, m_dBottom);
 
 	if (ShowID)
 	{
-		gdi->TextColor(Cgdi::green);
-		gdi->TextAtPos(Center(), ttos(ID()));
+		gdi->textColor(Cgdi::GREEN);
+		gdi->textAtPos(Center(), ttos(ID()));
 	}
 }
 
