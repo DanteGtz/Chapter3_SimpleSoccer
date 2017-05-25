@@ -64,9 +64,9 @@ public:
 
 	virtual ~BaseGameEntity() {}
 
-	virtual void Update() {};
+	virtual void update() {};
 
-	virtual void Render() = 0;
+	virtual void render() = 0;
 
 	virtual bool HandleMessage(const Telegram& msg) { return false; }
 	
