@@ -16,6 +16,7 @@ struct Vector2D;
 #define WAS_KEY_PRESSED(vk_code) ((GetKeyState(vk_code) & 0x8000) != 0)
 #define IS_KEY_PRESSED(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) != 0)
 
+
 //Esta funcion se llama para refrescar la pantalla
 inline void redrawWindow(HWND hwnd, bool redrawBackGround = true)
 {
@@ -23,29 +24,35 @@ inline void redrawWindow(HWND hwnd, bool redrawBackGround = true)
 	UpdateWindow(hwnd);
 }
 
+
 //Se llama cada vez que haya que refrescar la pantalla del cliente
-inline void RedrawWindowRect(HWND hwnd, bool redrawBackGround, RECT& redrawArea)
+inline void redrawWindowRect(HWND hwnd, bool redrawBackGround, RECT& redrawArea)
 {
 	InvalidateRect(hwnd, &redrawArea, redrawBackGround);
 	UpdateWindow(hwnd);
 }
 
+
 //Cambia los estados de item menu dados un identificador item,
 //el estado deseado y el HWND(pantalla) del menu del usuario
 void changeMenuState(HWND hwnd, UINT menuItem, UINT state);
+
 
 //Si b es verdaderdo, la variable menuItem se verifica
 //se deja sin verificar
 void checkMenuItemAppropriately(HWND hwnd, UINT menuItem, bool b);
 
+
 //Esta funcion es un remplazo del metodo StringCchLength que encontramos
 //en el SDK de la plataforma windows. Puedes visitar MSDN para mas
 //detalles. Solo se utiliza para checar las cadenas de la barra de 
 //herramientas
-bool checkBufferLength(char* buff, int MaxLength, unsigned int& BufferLength);
+bool checkBufferLength(char* buff, int maxLength, unsigned int& bufferLength);
+
 
 void errorBox(std::string& msg);
 void errorBox(char* msg);
+
 
 //Obtiene las coordenadas del cursor relativo a la ventana
 //activa
