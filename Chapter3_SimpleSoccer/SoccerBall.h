@@ -3,20 +3,10 @@
 #define SOCCERBALL_H
 #pragma warning (disable:4786)
 //The SoccerBall as an object
-//------------------------------------------------------------------------
-//
-//  Name: SoccerBall.h
-//
-//  Desc: Class to implement a soccer ball. This class inherits from
-//        MovingEntity and provides further functionality for collision
-//        testing and position prediction.
-//
-//  Author: Mat Buckland 2003 (fup@ai-junkie.com)
-//
-//------------------------------------------------------------------------
+
 #include <vector>
 
-#include "../Common/game/MovingEntity.h"
+#include "MovingEntity.h"
 #include "constants.h"
 
 
@@ -28,75 +18,82 @@ class SoccerBall : public MovingEntity
 {
 private:
 
-	//keeps a record of the ball's position at the last update
+	//Mantiene el registro de la posicion del balon
+	//hasta la ultima actualizacion
 	Vector2D                  m_vOldPos;
 
-	//a local reference to the Walls that make up the pitch boundary
+	//Una referencia local a los muros para marcar
+	//los limites del movimiento del balon
 	const std::vector<Wall2D>& m_PitchBoundary;
 
 
 
 
 public:
-	//tests to see if the ball has collided with a ball and reflects 
-	//the ball's velocity accordingly
-	void TestCollisionWithWalls(const std::vector<Wall2D>& walls);
+	//Prueba si el balon a colisionado con alguna pared.
+	//si es asi refleja la trayectoria del balon, de 
+	//acuerdo al angulo y la velocidad del objeto
+	void testCollisionWithWalls(const std::vector<Wall2D>& walls);
 
 	SoccerBall(Vector2D           pos,
-		double               BallSize,
+		double               ballSize,
 		double               mass,
 		std::vector<Wall2D>& PitchBoundary) :
 
-		//set up the base class
+		//Inicializacion de la clase base
 		MovingEntity(pos,
-			BallSize,
+			ballSize,
 			Vector2D(0, 0),
-			-1.0,                //max speed - unused
+			-1.0,                //max speed - sin usar 
 			Vector2D(0, 1),
 			mass,
-			Vector2D(1.0, 1.0),  //scale     - unused
-			0,                   //turn rate - unused
-			0),                  //max force - unused
+			Vector2D(1.0, 1.0),  //scale     - sin usar
+			0,                   //turn rate - sin usar
+			0),                  //max force - sin usar
 		m_PitchBoundary(PitchBoundary)
 	{}
 
-	//implement base class Update
-	void      Update();
+	//Implementa la funcion update
+	void      update();
 
-	//implement base class Render
+	//Implementa la funcion render
 	void      Render();
 
-	//a soccer ball doesn't need to handle messages
+	//Es balon no necesita manejar mensajes
 	bool      HandleMessage(const Telegram& msg) { return false; }
 
-	//this method applies a directional force to the ball (kicks it!)
-	void      Kick(Vector2D direction, double force);
+	//Este metodo aplica un vector dirrecional de fuerza del
+	//balon (al "patearla")
+	void      kick(Vector2D direction, double force);
 
-	//given a kicking force and a distance to traverse defined by start
-	//and finish points, this method calculates how long it will take the
-	//ball to cover the distance.
-	double    TimeToCoverDistance(Vector2D from,
+	//Dada una fuerza de bombeo (nombre fancy de patear el balon)
+	//y la distacia de viaje definida por una poscion inicial y una
+	//final, este metod calcula cuanto tiempo tardara en cubrir
+	//esa distancia
+	double    timeToCoverDistance(Vector2D from,
 		Vector2D to,
 		double     force)const;
 
-	//this method calculates where the ball will in 'time' seconds
-	Vector2D FuturePosition(double time)const;
+	//Este metodo calcula donde estara el balon en un tiempo
+	//futuro (dado en segundos)
+	Vector2D futurePosition(double time)const;
 
-	//this is used by players and goalkeepers to 'trap' a ball -- to stop
-	//it dead. That player is then assumed to be in possession of the ball
-	//and m_pOwner is adjusted accordingly
-	void      Trap() { m_vVelocity.Zero(); }
+	//Se invoca cada vez que los jugadores y el guardameta 
+	//tengan el balon en su control. Cuando un jugador la tiene
+	//en su poder, la posicion y m_pOwner se adaptan
+	void      trap() { m_vVelocity.zero(); }
 
 	Vector2D  OldPos()const { return m_vOldPos; }
 
-	//this places the ball at the desired location and sets its velocity to zero
-	void      PlaceAtPosition(Vector2D NewPos);
+	//Esta funcion coloca el balon en una poscion deseada
+	//y le asigna una nueva velocidad
+	void      placeAtPosition(Vector2D newPos);
 };
 
 
 
-//this can be used to vary the accuracy of a player's kick.
-Vector2D AddNoiseToKick(Vector2D BallPos, Vector2D BallTarget);
+//Este metodo disminuye la precision al patear el balon
+Vector2D addNoiseToKick(Vector2D ballPos, Vector2D ballTarget);
 
 
 
