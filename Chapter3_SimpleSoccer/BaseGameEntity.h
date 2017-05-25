@@ -2,6 +2,7 @@
 #ifndef BASE_GAME_ENTITY_H
 #define BASE_GAME_ENTITY_H
 #pragma warning (disable:4786)
+
 //The base class for all agents and objects
 #include <vector>
 #include <string>

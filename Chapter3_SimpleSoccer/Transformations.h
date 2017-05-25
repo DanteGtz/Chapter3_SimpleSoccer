@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+//Linear algebra library
+
 #include "Vector2D.h"
 #include "C2DMatrix.h"
 
@@ -165,4 +167,57 @@ inline Vector2D vectorToLocalSpace
 	//Asigna los parametros en cada uno de los 
 	//elementos de la matriz de transformacion
 	matTransform;
+}
+
+
+
+//-----------------> Rota alrededor del origen<----------------//
+
+//Rota un vector alrededor del origen a partir de una angulo (radianes)
+inline void vec2DRotateAroundOrigin(Vector2D& v, double ang)
+{
+	//Crea una matriz de transformacion
+	C2DMatrix mat;
+
+	//rotar
+	mat.rotate(ang);
+
+	//Ahora transforma los vertices del objeto
+	mat.transformVector2Ds(v);
+}
+
+
+
+//-----------------> Crea unos "Bigotes" <----------------//
+
+//Dados un origen, una direccion de trayectoria y un 'campo de vision' que 
+//describa el area exterior de los bigotes, la longitud de los bigotes
+//y su numero. Este metodo regresa un std::vector que contiene la posicion
+//final de una serie de bigotes que irradian alejandose del origen de
+//la entidad y equidistantes entre si (Se pueden visualizar como
+//los rayos de una bicicleta)
+inline std::vector<Vector2D> CreateWhiskers(unsigned int  numWhiskers,
+	double        whiskerLength,
+	double        fov,
+	Vector2D      facing,
+	Vector2D      origin)
+{
+	//Esta es una magnitud del angulo que separa cada bigote
+	double SectorSize = fov / (double)(numWhiskers - 1);
+
+	std::vector<Vector2D> whiskers;
+	Vector2D temp;
+	double angle = -fov*0.5;
+
+	for (unsigned int w = 0; w< numWhiskers; ++w)
+	{
+		//Crea un bigote que se extende hacia afuera
+		temp = facing;
+		vec2DRotateAroundOrigin(temp, angle);
+		whiskers.push_back(origin + whiskerLength * temp);
+
+		angle += SectorSize;
+	}
+
+	return whiskers;
 }
