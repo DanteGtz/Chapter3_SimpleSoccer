@@ -1,41 +1,44 @@
-#include "../game/EntityManager.h"
-#include "../game/BaseGameEntity.h"
+#include "EntityManager.h"
+#include "BaseGameEntity.h"
 
 //The definition of the member methods inside EM class
-//--------------------------- Instance ----------------------------------------
-//
-//   this class is a singleton
-//-----------------------------------------------------------------------------
-EntityManager* EntityManager::Instance()
+
+
+//-----------------> Area de un circulo <----------------////
+
+//Esta clase es un singleton
+EntityManager* EntityManager::instance()
 {
 	static EntityManager instance;
 
 	return &instance;
 }
 
-//------------------------- GetEntityFromID -----------------------------------
-//-----------------------------------------------------------------------------
-BaseGameEntity* EntityManager::GetEntityFromID(int id)const
+//-----------------> Obtener una entidad <----------------//
+//-----------------> por medio de su ID <----------------//
+
+BaseGameEntity* EntityManager::getEntityFromID(int id)const
 {
-	//find the entity
+	//Encuentra la entidad
 	EntityMap::const_iterator ent = m_EntityMap.find(id);
 
-	//assert that the entity is a member of the map
-	assert((ent != m_EntityMap.end()) && "<EntityManager::GetEntityFromID>: invalid ID");
+	//Arrojamos un error si la entidad no es valida
+	assert((ent != m_EntityMap.end()) && "<EntityManager::getEntityFromID>: invalid ID");
 
 	return ent->second;
 }
 
-//--------------------------- RemoveEntity ------------------------------------
-//-----------------------------------------------------------------------------
-void EntityManager::RemoveEntity(BaseGameEntity* pEntity)
+
+//-----------------> Remueve una entidad <----------------//
+
+void EntityManager::removeEntity(BaseGameEntity* pEntity)
 {
-	m_EntityMap.erase(m_EntityMap.find(pEntity->ID()));
+	m_EntityMap.erase(m_EntityMap.find(pEntity->getID()));
 }
 
-//---------------------------- RegisterEntity ---------------------------------
-//-----------------------------------------------------------------------------
-void EntityManager::RegisterEntity(BaseGameEntity* NewEntity)
+//-----------------> Registra una entidad <----------------//
+
+void EntityManager::registerEntity(BaseGameEntity* NewEntity)
 {
-	m_EntityMap.insert(std::make_pair(NewEntity->ID(), NewEntity));
+	m_EntityMap.insert(std::make_pair(NewEntity->getID(), NewEntity));
 }
